@@ -8,6 +8,9 @@ from sklearn.model_selection import train_test_split
 from src.exception import CustomException
 from src.logger import logging
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 
 @dataclass
 class DataIngestionConfig:
@@ -71,10 +74,19 @@ class DataIngestion:
         except Exception as e:
             raise CustomException(e, sys)
 
-
 if __name__ == "__main__":
     obj = DataIngestion()
     train_data_path, test_data_path = obj.initiate_data_ingestion()
 
+    data_transformation = DataTransformation()
+
+    train_arr, test_arr, preprocessor_path = (
+        data_transformation.initiate_data_transformation(
+            train_data_path,
+            test_data_path
+        )
+    )
+
     print("Train data saved at:", train_data_path)
     print("Test data saved at:", test_data_path)
+    print("Preprocessor saved at:", preprocessor_path)
